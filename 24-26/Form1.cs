@@ -1,4 +1,6 @@
 using System;
+using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace _24_26_
@@ -10,6 +12,10 @@ namespace _24_26_
         private ComboBox comboBoxClass;
         private TextBox textBoxBackstory;
         private Button buttonRegister;
+        private PictureBox pictureBox1;
+        private Label label1;
+        private Label label2;
+        private Label label3;
 
         public Form1()
         {
@@ -39,12 +45,11 @@ namespace _24_26_
             // 
             // comboBoxClass
             // 
-            comboBoxClass.Items.AddRange(new object[] { "Маг", "Целитель", "Высший Маг", "Закленатель Духов", "Убийца Драконов", "Убийца Демонов" });
+            comboBoxClass.Items.AddRange(new object[] { "Маг", "Целитель", "Высший Маг", "Заклинатель Духов", "Убийца Драконов", "Убийца Демонов" });
             comboBoxClass.Location = new Point(34, 185);
             comboBoxClass.Name = "comboBoxClass";
             comboBoxClass.Size = new Size(186, 28);
             comboBoxClass.TabIndex = 3;
-            comboBoxClass.SelectedIndexChanged += comboBoxClass_SelectedIndexChanged;
             // 
             // textBoxBackstory
             // 
@@ -84,7 +89,6 @@ namespace _24_26_
             label1.Size = new Size(160, 25);
             label1.TabIndex = 10;
             label1.Text = "Введите никнейм";
-            label1.Click += label1_Click_1;
             // 
             // label2
             // 
@@ -95,7 +99,6 @@ namespace _24_26_
             label2.Size = new Size(147, 25);
             label2.TabIndex = 11;
             label2.Text = "Выберите класс";
-            label2.Click += label2_Click;
             // 
             // label3
             // 
@@ -129,54 +132,195 @@ namespace _24_26_
             PerformLayout();
         }
 
-        private string GetPlayerData()
+        private void buttonRegister_Click(object sender, EventArgs e)
         {
             string nickname = textBoxNickname.Text.Trim();
-            string classChoice = comboBoxClass.SelectedItem?.ToString() ?? "Воин";
+            string classChoice = comboBoxClass.SelectedItem?.ToString() ?? "Маг";
             string backstory = textBoxBackstory.Text.Trim();
 
+            // Условия по заданию
             if (string.IsNullOrEmpty(nickname))
                 nickname = "Безымянный раб";
 
             if (string.IsNullOrEmpty(backstory))
                 backstory = "Просто путник";
 
-            return $"Ник: {nickname}\nКласс: {classChoice}\nПредыстория: {backstory}";
+            // Создаём красивую карточку персонажа
+            Form cardForm = new Form();
+            cardForm.Text = "Карточка персонажа";
+            cardForm.Size = new Size(600, 400);
+            cardForm.StartPosition = FormStartPosition.CenterScreen;
+            cardForm.FormBorderStyle = FormBorderStyle.FixedDialog;
+            cardForm.MaximizeBox = false;
+            cardForm.MinimizeBox = false;
+            cardForm.BackColor = Color.LightGoldenrodYellow;
+
+            // Фото Макарова
+            PictureBox picmakarov = new PictureBox
+            {
+                Location = new Point(20, 20),
+                Size = new Size(150, 180),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.White
+            };
+
+            // Приветствие
+            Label lblGreeting = new Label
+            {
+                Text = "Тебя приветствует мастер Гильдии\n\"Хвост Феи\" Макаров!\nДобро пожаловать, согильдиец!",
+                Location = new Point(190, 20),
+                Size = new Size(380, 80),
+                Font = new Font("Arial", 10, FontStyle.Bold),
+                ForeColor = Color.DarkBlue,
+                BackColor = Color.Transparent,
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+
+            // Данные персонажа
+            Label lblNick = new Label
+            {
+                Text = $"Ник: {nickname}",
+                Location = new Point(190, 110),
+                AutoSize = true,
+                Font = new Font("Arial", 12, FontStyle.Bold),
+                ForeColor = Color.Black
+            };
+
+            Label lblClass = new Label
+            {
+                Text = $"Класс: {classChoice}",
+                Location = new Point(190, 140),
+                AutoSize = true,
+                Font = new Font("Arial", 12),
+                ForeColor = Color.Black
+            };
+
+            Label lblBack = new Label
+            {
+                Text = $"Предыстория: {backstory}",
+                Location = new Point(190, 170),
+                Size = new Size(380, 60),
+                Font = new Font("Arial", 11),
+                ForeColor = Color.Black,
+                BackColor = Color.Transparent
+            };
+
+            // Кнопка ПРОДОЛЖИТЬ
+            Button btnContinue = new Button
+            {
+                Text = "ПРОДОЛЖИТЬ",
+                Location = new Point(450, 320),
+                Size = new Size(120, 35),
+                Font = new Font("Arial", 10, FontStyle.Bold),
+                BackColor = Color.LightGreen,
+                ForeColor = Color.DarkGreen
+            };
+            btnContinue.Click += (s, ev) =>
+            {
+                cardForm.Close();
+                // Переходим к характеристикам
+                Form2 form2 = new Form2();
+                form2.Show();
+                this.Hide();
+            };
+
+            // Добавляем всё на форму
+            cardForm.Controls.AddRange(new Control[]
+            {
+                picmakarov, lblGreeting, lblNick, lblClass, lblBack, btnContinue
+            });
+
+            // Загружаем фото Макарова
+            LoadmakarovImage(picmakarov);
+
+            // Показываем карточку
+            cardForm.ShowDialog();
         }
 
-        private void buttonRegister_Click(object sender, EventArgs e)
+        private void LoadmakarovImage(PictureBox pictureBox)
         {
-            string card = GetPlayerData();
-            MessageBox.Show(card, "Карточка персонажа", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            try
+            {
+                // Способ 1: Пробуем загрузить из файлов в папке с проектом
+                string[] possibleFiles = {
+                    "makarov.jpg", "makarov.png", "макаров.jpg", "макаров.png",
+                    "master.jpg", "master.png", "makaroв.jpg", "makaroв.png"
+                };
 
-            Form2 form2 = new Form2();
-            form2.Show();
-            this.Hide();
+                foreach (string fileName in possibleFiles)
+                {
+                    if (File.Exists(fileName))
+                    {
+                        pictureBox.Image = Image.FromFile(fileName);
+                        return;
+                    }
+                }
+
+                // Способ 2: Пробуем загрузить из папки Resources
+                string projectPath = Directory.GetCurrentDirectory();
+                string resourcesPath = Path.Combine(projectPath, "Resources");
+
+                if (Directory.Exists(resourcesPath))
+                {
+                    foreach (string fileName in possibleFiles)
+                    {
+                        string fullPath = Path.Combine(resourcesPath, fileName);
+                        if (File.Exists(fullPath))
+                        {
+                            pictureBox.Image = Image.FromFile(fullPath);
+                            return;
+                        }
+                    }
+                }
+
+                // Способ 3: Создаем профессиональную заглушку
+                CreateProfessionalPlaceholder(pictureBox);
+            }
+            catch (Exception ex)
+            {
+                // Если ошибка - создаем заглушку
+                CreateProfessionalPlaceholder(pictureBox);
+            }
         }
 
-        private void comboBoxClass_SelectedIndexChanged(object sender, EventArgs e)
+        private void CreateProfessionalPlaceholder(PictureBox pictureBox)
         {
+            try
+            {
+                Bitmap placeholder = new Bitmap(150, 180);
+                using (Graphics g = Graphics.FromImage(placeholder))
+                {
+                    // Фон
+                    g.Clear(Color.SteelBlue);
 
+                    // Рамка
+                    g.DrawRectangle(new Pen(Color.Gold, 3), 5, 5, 140, 170);
+
+                    // Символика гильдии
+                    g.FillEllipse(Brushes.Gold, 50, 40, 50, 50); // Солнце
+                    g.FillEllipse(Brushes.White, 55, 45, 40, 40); // Внутренний круг
+
+                    // Текст
+                    StringFormat format = new StringFormat();
+                    format.Alignment = StringAlignment.Center;
+                    format.LineAlignment = StringAlignment.Center;
+
+                    g.DrawString("Гильдия", new Font("Arial", 10, FontStyle.Bold), Brushes.DarkBlue,
+                               new Rectangle(10, 100, 130, 30), format);
+                    g.DrawString("Хвост Феи", new Font("Arial", 9, FontStyle.Bold), Brushes.DarkRed,
+                               new Rectangle(10, 125, 130, 25), format);
+                    g.DrawString("Макаров", new Font("Arial", 8, FontStyle.Italic), Brushes.Black,
+                               new Rectangle(10, 150, 130, 20), format);
+                }
+
+                pictureBox.Image = placeholder;
+            }
+            catch
+            {
+                // Если даже заглушка не работает - просто белый фон
+                pictureBox.BackColor = Color.White;
+            }
         }
-        private System.ComponentModel.IContainer components;
-        private PictureBox pictureBox1;
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-        private Label label1;
-
-        private void label1_Click_1(object sender, EventArgs e)
-        {
-
-        }
-        private Label label2;
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-        private Label label3;
     }
 }

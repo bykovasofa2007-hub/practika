@@ -4,248 +4,251 @@ using System.Windows.Forms;
 
 namespace _24_26_
 {
-    public partial class Form2 : Form
+    public class Form2 : Form
     {
         private int totalPoints = 20;
-        private int strength = 0, agility = 0, intelligence = 0;
-
-        // Элементы формы
-        private NumericUpDown numericUpDownStrength;
-        private NumericUpDown numericUpDownAgility;
-        private NumericUpDown numericUpDownIntelligence;
+        private NumericUpDown numStrength, numAgility, numIntelligence;
         private Label labelRemaining;
         private Button buttonConfirm;
+        private Button buttonCheckDoor;
+        private int playerStrength;
 
         public Form2()
         {
             InitializeComponent();
+            UpdateRemaining(null, EventArgs.Empty); // Инициализируем текст оставшихся очков
         }
 
         private void InitializeComponent()
         {
-            numericUpDownStrength = new NumericUpDown();
-            numericUpDownAgility = new NumericUpDown();
-            numericUpDownIntelligence = new NumericUpDown();
+            labelTitle = new Label();
+            lblStr = new Label();
+            numStrength = new NumericUpDown();
+            lblAgi = new Label();
+            numAgility = new NumericUpDown();
+            lblInt = new Label();
+            numIntelligence = new NumericUpDown();
             labelRemaining = new Label();
+            buttonCheckDoor = new Button();
             buttonConfirm = new Button();
-            label1 = new Label();
-            label2 = new Label();
-            label3 = new Label();
-            ((System.ComponentModel.ISupportInitialize)numericUpDownStrength).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDownAgility).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDownIntelligence).BeginInit();
+
+            ((System.ComponentModel.ISupportInitialize)numStrength).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numAgility).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numIntelligence).BeginInit();
             SuspendLayout();
+
             // 
-            // numericUpDownStrength
+            // labelTitle
             // 
-            numericUpDownStrength.Location = new Point(148, 45);
-            numericUpDownStrength.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
-            numericUpDownStrength.Name = "numericUpDownStrength";
-            numericUpDownStrength.Size = new Size(120, 27);
-            numericUpDownStrength.TabIndex = 1;
-            numericUpDownStrength.ValueChanged += UpdateRemainingPoints;
+            labelTitle.AutoSize = true;
+            labelTitle.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            labelTitle.Location = new Point(150, 20);
+            labelTitle.Name = "labelTitle";
+            labelTitle.Size = new Size(200, 25);
+            labelTitle.TabIndex = 0;
+            labelTitle.Text = "Распределение характеристик";
+            labelTitle.TextAlign = ContentAlignment.MiddleCenter;
+
             // 
-            // numericUpDownAgility
+            // lblStr
             // 
-            numericUpDownAgility.Location = new Point(148, 121);
-            numericUpDownAgility.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
-            numericUpDownAgility.Name = "numericUpDownAgility";
-            numericUpDownAgility.Size = new Size(120, 27);
-            numericUpDownAgility.TabIndex = 3;
-            numericUpDownAgility.ValueChanged += UpdateRemainingPoints;
+            lblStr.AutoSize = true;
+            lblStr.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            lblStr.Location = new Point(80, 80);
+            lblStr.Name = "lblStr";
+            lblStr.Size = new Size(52, 20);
+            lblStr.TabIndex = 1;
+            lblStr.Text = "Сила:";
+
             // 
-            // numericUpDownIntelligence
+            // numStrength
             // 
-            numericUpDownIntelligence.Location = new Point(148, 199);
-            numericUpDownIntelligence.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
-            numericUpDownIntelligence.Name = "numericUpDownIntelligence";
-            numericUpDownIntelligence.Size = new Size(120, 27);
-            numericUpDownIntelligence.TabIndex = 5;
-            numericUpDownIntelligence.ValueChanged += UpdateRemainingPoints;
+            numStrength.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            numStrength.Location = new Point(150, 78);
+            numStrength.Name = "numStrength";
+            numStrength.Size = new Size(80, 26);
+            numStrength.TabIndex = 2;
+            numStrength.Value = 13;
+            numStrength.ValueChanged += UpdateRemaining;
+
+            // 
+            // lblAgi
+            // 
+            lblAgi.AutoSize = true;
+            lblAgi.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            lblAgi.Location = new Point(80, 130);
+            lblAgi.Name = "lblAgi";
+            lblAgi.Size = new Size(84, 20);
+            lblAgi.TabIndex = 3;
+            lblAgi.Text = "Ловкость:";
+
+            // 
+            // numAgility
+            // 
+            numAgility.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            numAgility.Location = new Point(170, 128);
+            numAgility.Name = "numAgility";
+            numAgility.Size = new Size(80, 26);
+            numAgility.TabIndex = 4;
+            numAgility.Value = 2;
+            numAgility.ValueChanged += UpdateRemaining;
+
+            // 
+            // lblInt
+            // 
+            lblInt.AutoSize = true;
+            lblInt.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            lblInt.Location = new Point(80, 180);
+            lblInt.Name = "lblInt";
+            lblInt.Size = new Size(101, 20);
+            lblInt.TabIndex = 5;
+            lblInt.Text = "Интеллект:";
+
+            // 
+            // numIntelligence
+            // 
+            numIntelligence.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            numIntelligence.Location = new Point(190, 178);
+            numIntelligence.Name = "numIntelligence";
+            numIntelligence.Size = new Size(80, 26);
+            numIntelligence.TabIndex = 6;
+            numIntelligence.Value = 5;
+            numIntelligence.ValueChanged += UpdateRemaining;
+
             // 
             // labelRemaining
             // 
             labelRemaining.AutoSize = true;
-            labelRemaining.Location = new Point(148, 247);
+            labelRemaining.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            labelRemaining.Location = new Point(150, 230);
             labelRemaining.Name = "labelRemaining";
-            labelRemaining.Size = new Size(141, 20);
-            labelRemaining.TabIndex = 6;
-            labelRemaining.Text = "Осталось очков: 20";
+            labelRemaining.Size = new Size(140, 20);
+            labelRemaining.TabIndex = 7;
+            labelRemaining.Text = "Осталось очков: 0";
+
+            // 
+            // buttonCheckDoor
+            // 
+            buttonCheckDoor.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            buttonCheckDoor.Location = new Point(80, 280);
+            buttonCheckDoor.Name = "buttonCheckDoor";
+            buttonCheckDoor.Size = new Size(120, 35);
+            buttonCheckDoor.TabIndex = 8;
+            buttonCheckDoor.Text = "Проверить";
+            buttonCheckDoor.UseVisualStyleBackColor = true;
+            buttonCheckDoor.Click += ButtonCheckDoor_Click;
+
             // 
             // buttonConfirm
             // 
-            buttonConfirm.Location = new Point(148, 286);
+            buttonConfirm.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            buttonConfirm.Location = new Point(250, 280);
             buttonConfirm.Name = "buttonConfirm";
-            buttonConfirm.Size = new Size(200, 50);
-            buttonConfirm.TabIndex = 7;
-            buttonConfirm.Text = "Подтвердить характеристики";
-            buttonConfirm.Click += buttonConfirm_Click;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(148, 11);
-            label1.Name = "label1";
-            label1.Size = new Size(43, 20);
-            label1.TabIndex = 8;
-            label1.Text = "Сила";
-            label1.Click += label1_Click;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(146, 89);
-            label2.Name = "label2";
-            label2.Size = new Size(73, 20);
-            label2.TabIndex = 9;
-            label2.Text = "Ловкость";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(146, 160);
-            label3.Name = "label3";
-            label3.Size = new Size(80, 20);
-            label3.TabIndex = 10;
-            label3.Text = "Интеллект";
+            buttonConfirm.Size = new Size(120, 35);
+            buttonConfirm.TabIndex = 9;
+            buttonConfirm.Text = "Подтвердить";
+            buttonConfirm.UseVisualStyleBackColor = true;
+            buttonConfirm.Click += ButtonConfirm_Click;
+
             // 
             // Form2
             // 
-            BackgroundImage = Properties.Resources.лол;
-            ClientSize = new Size(759, 427);
-            Controls.Add(label3);
-            Controls.Add(label2);
-            Controls.Add(label1);
-            Controls.Add(numericUpDownStrength);
-            Controls.Add(numericUpDownAgility);
-            Controls.Add(numericUpDownIntelligence);
-            Controls.Add(labelRemaining);
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.LightBlue;
+            ClientSize = new Size(482, 353);
             Controls.Add(buttonConfirm);
+            Controls.Add(buttonCheckDoor);
+            Controls.Add(labelRemaining);
+            Controls.Add(numIntelligence);
+            Controls.Add(lblInt);
+            Controls.Add(numAgility);
+            Controls.Add(lblAgi);
+            Controls.Add(numStrength);
+            Controls.Add(lblStr);
+            Controls.Add(labelTitle);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "Form2";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Распределение характеристик";
-            ((System.ComponentModel.ISupportInitialize)numericUpDownStrength).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDownAgility).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDownIntelligence).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numStrength).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numAgility).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numIntelligence).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
-        private void UpdateRemainingPoints(object sender, EventArgs e)
+        private void UpdateRemaining(object sender, EventArgs e)
         {
-            strength = (int)numericUpDownStrength.Value;
-            agility = (int)numericUpDownAgility.Value;
-            intelligence = (int)numericUpDownIntelligence.Value;
-
-            int used = strength + agility + intelligence;
+            int used = (int)numStrength.Value + (int)numAgility.Value + (int)numIntelligence.Value;
             int remaining = totalPoints - used;
             labelRemaining.Text = $"Осталось очков: {remaining}";
 
-            if (remaining < 0)
+            labelRemaining.ForeColor = remaining switch
             {
-                labelRemaining.ForeColor = Color.Red;
-                MessageBox.Show("Слишком много очков! У тебя только 20.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            else if (remaining > 0)
-            {
-                labelRemaining.ForeColor = Color.Orange;
-            }
-            else
-            {
-                labelRemaining.ForeColor = Color.Green;
-            }
+                < 0 => Color.Red,
+                > 0 => Color.Orange,
+                _ => Color.Green
+            };
         }
 
-        private void buttonConfirm_Click(object sender, EventArgs e)
+        private void ButtonCheckDoor_Click(object sender, EventArgs e)
         {
-            int used = strength + agility + intelligence;
+            playerStrength = (int)numStrength.Value;
+            string doorResult = CheckDoorResult(playerStrength);
+            MessageBox.Show(doorResult, "Результат взаимодействия с дверью",
+                          MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void ButtonConfirm_Click(object sender, EventArgs e)
+        {
+            int used = (int)numStrength.Value + (int)numAgility.Value + (int)numIntelligence.Value;
+
             if (used > totalPoints)
             {
-                MessageBox.Show("Слишком много очков! У тебя только 20.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Слишком много очков! У тебя только 20.", "Ошибка",
+                              MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
             if (used < totalPoints)
             {
-                var result = MessageBox.Show("У тебя остались нераспределённые очки. Продолжить?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                var result = MessageBox.Show("У тебя остались нераспределённые очки. Продолжить?",
+                                           "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (result == DialogResult.No)
                     return;
             }
 
-            PlayerStrength = strength;
-            ShowDoorTest();
-        }
-
-        public int PlayerStrength { get; private set; }
-
-        private void ShowDoorTest()
-        {
+            playerStrength = (int)numStrength.Value;
+            // Проверка двери при подтверждении
+            string doorResult = CheckDoorResult(playerStrength);
+            MessageBox.Show(doorResult, "Результат взаимодействия с дверью",
+                          MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Переход к инвентарю
+            Form3 form3 = new Form3();
+            form3.Show();
             this.Hide();
-            Form doorForm = new Form();
-            doorForm.Text = "Проверка силы";
-            doorForm.Size = new Size(400, 200);
-            doorForm.StartPosition = FormStartPosition.CenterScreen;
-
-            Label label = new Label
-            {
-                Text = "Ваша сила: " + PlayerStrength.ToString(),
-                Location = new Point(20, 20),
-                AutoSize = true
-            };
-
-            TextBox inputBox = new TextBox
-            {
-                Location = new Point(20, 50),
-                Width = 100
-            };
-            inputBox.Text = PlayerStrength.ToString();
-
-            Button testButton = new Button
-            {
-                Text = "Проверить дверь",
-                Location = new Point(200, 50)
-            };
-
-            testButton.Click += (s, e) =>
-            {
-                int userStrength;
-                if (!int.TryParse(inputBox.Text, out userStrength))
-                {
-                    MessageBox.Show("Введите корректное число!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                string result = CheckDoorResult(userStrength);
-                MessageBox.Show(result, "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            };
-
-            doorForm.Controls.AddRange(new Control[] { label, inputBox, testButton });
-            doorForm.ShowDialog();
-            Application.Exit(); // Завершаем приложение после проверки
         }
 
         private string CheckDoorResult(int strength)
         {
-            if (strength < 0 || strength > 30)
-                return "Сила должна быть от 0 до 30.";
-
-            if (strength < 5)
-                return "Ты пытаешься выбить дверь плечом… и ломаешь себе ключицу(немощ)";
-            else if (strength <= 9)
-                return "Дверь отвечает глухим звуком на твою жалкую попытку ее открыть(пу-пу-пу)";
-            else if (strength <= 14)
-                return "Сильным движением руки, ты отпираешь дверь(хорош)";
-            else if (strength <= 19)
-                return "Дверь разлетелась в щепки от твоего удара!(чини теперь, миллионер)";
-            else
-                return "ТЫДЫЩ!!!!! Дверь не просто открывается — её выбивает ударная волна!";
+            return strength switch
+            {
+                < 0 => "Сила не может быть отрицательной!",
+                < 5 => "Ты пытаешься выбить дверь плечом… и ломаешь себе ключицу",
+                <= 9 => "Дверь отвечает глухим звуком на твою жалкую попытку ее открыть",
+                <= 14 => "Сильным движением руки, ты отпираешь дверь",
+                <= 19 => "Дверь разлетелась в щепки от твоего удара!",
+                <= 30 => "ТЫДЫЩ!!!!! Дверь не просто открывается — её выбивает ударная волна!",
+                _ => "Ты настолько сильный, что сдвинул саму реальность! Дверь исчезла."
+            };
         }
-        private Label label1;
-        private Label label2;
-        private Label label3;
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
+        private Label labelTitle;
+        private Label lblStr;
+        private Label lblAgi;
+        private Label lblInt;
     }
 }

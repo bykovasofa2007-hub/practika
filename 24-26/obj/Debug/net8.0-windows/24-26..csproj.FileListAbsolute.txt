@@ -16,3 +16,5 @@ C:\Users\Thunderobot\source\repos\игра\24-26\obj\Debug\net8.0-windows\24-26.
 C:\Users\Thunderobot\source\repos\игра\24-26\obj\Debug\net8.0-windows\24-26..genruntimeconfig.cache
 C:\Users\Thunderobot\source\repos\игра\24-26\obj\Debug\net8.0-windows\ref\24-26..dll
 C:\Users\Thunderobot\source\repos\игра\24-26\obj\Debug\net8.0-windows\_24_26_.Properties.Resources.resources
+C:\Users\Thunderobot\source\repos\игра\24-26\obj\Debug\net8.0-windows\_24_26_.Form3.resources
+C:\Users\Thunderobot\source\repos\игра\24-26\obj\Debug\net8.0-windows\DungeonGenerator.Form4.resources
